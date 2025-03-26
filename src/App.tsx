@@ -52,10 +52,13 @@
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './Header';
 import './index.css';
+import {WalletConnector} from "./components/WalletConnector.tsx";
 
 export function App() {
+
+
     return (
-        <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
+        <TonConnectUIProvider manifestUrl="https://raw.githubusercontent.com/David-Bamgbade/mY-tOn-FroNtend/master/public/tonconnect-manifest.json">
             <div className="app-container">
                 <Header />
                 <main className="landing">
@@ -64,7 +67,7 @@ export function App() {
                         <p className="hero-subtitle">
                             Deposit, withdraw, and claim airdrops with seamless TON integration.
                         </p>
-                        <button className="hero-cta">Get Started</button>
+                        <WalletConnector />
                     </section>
                 </main>
             </div>
