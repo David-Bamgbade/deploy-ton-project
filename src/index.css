@@ -1,0 +1,208 @@
+/* src/styles.css */
+
+/* Reset and Base Styles */
+/* src/styles.css */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+    color: #e0e0e0;
+    font-family: 'SF Pro Display', 'Roboto', sans-serif; /* Apple’s font (or fallback) */
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Main Container */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles (unchanged) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00d4ff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.nav-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.nav-button.claim {
+    background-color: #00cc66;
+}
+
+.nav-button.claim:hover {
+    background-color: #00a352;
+}
+
+.nav-button.disabled {
+    background-color: #2a2a2a;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.wallet {
+    display: flex;
+    align-items: center;
+}
+
+/* Landing Page Styles */
+.landing {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 40px;
+    background: linear-gradient(180deg, rgba(13, 13, 26, 0.9) 0%, rgba(26, 26, 46, 0.7) 100%);
+}
+
+.hero {
+    text-align: center;
+    max-width: 800px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.05); /* Glassmorphism effect */
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px); /* Frosted glass */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(90deg, #00d4ff, #007bff); /* Gradient text */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    color: #b0b0b0;
+    margin-bottom: 30px;
+}
+
+.hero-cta {
+    padding: 14px 32px;
+    background: linear-gradient(90deg, #007bff, #00d4ff); /* Gradient button */
+    color: #fff;
+    border: none;
+    border-radius: 50px; /* Rounded like Apple buttons */
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.hero-cta:hover {
+    transform: scale(1.05); /* Subtle scale effect */
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6);
+}
+
+.hero-cta:active {
+    transform: scale(0.98); /* Click feedback */
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        padding: 15px 20px;
+    }
+
+    .nav {
+        flex-direction: column;
+        gap: 10px;
+        margin: 15px 0;
+        width: 100%;
+    }
+
+    .nav-button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .landing {
+        padding: 20px;
+    }
+
+    .hero {
+        padding: 20px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+    }
+
+    .hero-cta {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+}

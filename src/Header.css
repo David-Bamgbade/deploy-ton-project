@@ -1,0 +1,59 @@
+/* src/Header.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: linear-gradient(90deg, #0d0d1a 0%, #1a1a2e 100%); /* Dark gradient */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #00d4ff; /* Bright cyan for a crypto feel */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-button {
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue for Deposit/Withdraw */
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.nav-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.nav-button.claim {
+    background-color: #00cc66; /* Green for Claim Airdrop */
+}
+
+.nav-button.claim:hover {
+    background-color: #00a352; /* Darker green on hover */
+}
+
+.nav-button.disabled {
+    background-color: #333; /* Gray when disabled */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.wallet {
+    display: flex;
+    align-items: center;
+}
