@@ -1,111 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { Address, TonClient, beginCell } from '@ton/ton';
+import {JettonDefaultWallet} from "../contracts/JettonDefaultWallet.tsx";
 
 export const WalletConnector: React.FC = () => {
     const [tonConnectUI] = useTonConnectUI();
     const [client, setClient] = useState<TonClient | null>(null);
     const [userWalletAddress, setUserWalletAddress] = useState<Address | null>(null);
 
-    const masterAddress = Address.parse('EQC66UZBdWHvgsqe94LRt8cgq-6LL6CQ0IbvQaiElfw2B-A5'); // Your master contract address
-    const initialWalletAddress = Address.parse('EQBbTd-tlYAYHpbeLTxrQ1V0xHRXr6BE30MK2c9erRUHWY8i'); // Your deployed wallet
+    const masterAddress = Address.parse('EQC66UZBdWHvgsqe94LRt8cgq-6LL6CQ0IbvQaiElfw2B-A5');
 
-    // Initialize TON Client
+
     useEffect(() => {
         const initClient = async () => {
-            const tonClient = new TonClient({
-                endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-            });
-            setClient(tonClient);
+            try {
+                const tonClient = new TonClient({
+                    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+                });
+                setClient(tonClient);
+            } catch (error) {
+                console.error('Failed to initialize TON Client:', error);
+            }
         };
-        initClient().then();
+        initClient();
     }, []);
 
-    // Create a new wallet for the user
     const createUserWallet = async () => {
-        if (!client || !tonConnectUI.connected) return;
-
-        const message = beginCell().storeStringTail('CreateWallet').endCell();
-        await tonConnectUI.sendTransaction({
-            validUntil: Math.floor(Date.now() / 1000) + 60,
-            messages: [
-                {
-                    address: initialWalletAddress.toString(), // Send to your initial wallet to trigger creation
-                    amount: '200000000', // 0.2 TON in nanotons
-                    payload: message.toBoc().toString('base64'),
-                },
-            ],
-        });
-
-        // Calculate the new wallet address (deterministic based on sender)
-        const newWalletInit = await client.runMethod(initialWalletAddress, 'getJettonWalletAddress', [
-            { type: 'slice', cell: beginCell().storeAddress(Address.parse(tonConnectUI.account!.address)).endCell() },
-        ]);
-        const newWalletAddress = newWalletInit.stack.readAddress();
-        setUserWalletAddress(newWalletAddress);
-        console.log('New wallet created at:', newWalletAddress.toString());
+        if (!client || !tonConnectUI.connected) {
+            console.error('TON Client or wallet not ready');
+            return;
+        }
+        try {
+            const ownerAddress = Address.parse(tonConnectUI.account!.address);
+            const jettonWallet = JettonDefaultWallet.createFromAddress(masterAddress, ownerAddress);
+            setUserWalletAddress(jettonWallet.address);
+            console.log('Jetton wallet address computed:', jettonWallet.address.toString());
+        } catch (error) {
+            console.error('Failed to compute Jetton wallet address:', error);
+        }
     };
 
-    // Transfer tokens
     const transferTokens = async () => {
-        if (!client || !userWalletAddress) return;
+        if (!client || !userWalletAddress || !tonConnectUI.connected) {
+            console.error('TON Client, wallet, or Jetton address not ready');
+            return;
+        }
+        try {
+            const message = beginCell()
+                .storeUint(0xf8a7ea5, 32)
+                .storeUint(0, 64)
+                .storeCoins(1000000)
+                .storeAddress(Address.parse('EQ_RECIPIENT_ADDRESS'))
+                .storeAddress(Address.parse(tonConnectUI.account!.address))
+                .storeCoins(0)
+                .storeSlice(beginCell().endCell().beginParse())
+                .endCell();
 
-        const message = beginCell()
-            .storeUint(0xf8a7ea5, 32) // TokenTransfer opcode
-            .storeUint(0, 64) // queryId
-            .storeCoins(1000000) // Amount (e.g., 1 token, adjust decimals)
-            .storeAddress(Address.parse('EQ_RECIPIENT_ADDRESS')) // Destination
-            .storeAddress(Address.parse(tonConnectUI.account!.address)) // Response destination
-            .storeCoins(0) // forwardTonAmount
-            .storeSlice(beginCell().endCell().beginParse()) // forwardPayload
-            .endCell();
-
-        await tonConnectUI.sendTransaction({
-            validUntil: Math.floor(Date.now() / 1000) + 60,
-            messages: [
-                {
-                    address: userWalletAddress.toString(),
-                    amount: '200000000', // 0.2 TON
-                    payload: message.toBoc().toString('base64'),
-                },
-            ],
-        });
-        console.log('Tokens transferred');
+            await tonConnectUI.sendTransaction({
+                validUntil: Math.floor(Date.now() / 1000) + 60,
+                messages: [
+                    {
+                        address: userWalletAddress.toString(),
+                        amount: '200000000',
+                        payload: message.toBoc().toString('base64'),
+                    },
+                ],
+            });
+            console.log('Tokens transferred successfully');
+        } catch (error) {
+            console.error('Token transfer failed:', error);
+        }
     };
 
-    // Mint tokens (only master can mint, so this is an example from master)
-    const mintTokens = async () => {
-        if (!client || !userWalletAddress) return;
-
-        const message = beginCell()
-            .storeUint(0x178d4519, 32) // TokenMint opcode
-            .storeUint(0, 64) // queryId
-            .storeCoins(1000000) // Amount (e.g., 1 token)
-            .storeAddress(userWalletAddress) // Receiver
-            .storeCoins(0) // forwardTonAmount
-            .storeSlice(beginCell().endCell().beginParse()) // forwardPayload
-            .endCell();
-
-        await tonConnectUI.sendTransaction({
-            validUntil: Math.floor(Date.now() / 1000) + 60,
-            messages: [
-                {
-                    address: masterAddress.toString(), // Sent from master
-                    amount: '200000000', // 0.2 TON
-                    payload: message.toBoc().toString('base64'),
-                },
-            ],
-        });
-        console.log('Tokens minted');
-    };
-
-    // Get balance
     const getBalance = async () => {
-        if (!client || !userWalletAddress) return;
-        const result = await client.runMethod(userWalletAddress, 'getBalance');
-        const balance = result.stack.readBigNumber();
-        console.log('Balance:', balance.toString());
-        return balance;
+        if (!client || !userWalletAddress) {
+            console.error('TON Client or Jetton address not ready');
+            return;
+        }
+        try {
+            const wallet = new JettonDefaultWallet(userWalletAddress);
+            const data = await wallet.getWalletData(client.provider(userWalletAddress));
+            const balance = data.balance;
+            console.log('Jetton Balance:', balance.toString());
+            return balance;
+        } catch (error) {
+            console.error('Failed to get balance:', error);
+        }
     };
 
     return (
@@ -114,16 +94,67 @@ export const WalletConnector: React.FC = () => {
                 <div>
                     <p>Connected: {tonConnectUI.account?.address}</p>
                     {!userWalletAddress ? (
-                        <button onClick={createUserWallet}>Create My Wallet</button>
+                        <button
+                            onClick={createUserWallet}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#28a745',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '20px',
+                                cursor: 'pointer',
+                                margin: '5px',
+                            }}
+                        >
+                            Create My Jetton Wallet
+                        </button>
                     ) : (
                         <>
-                            <p>My Wallet: {userWalletAddress.toString()}</p>
-                            <button onClick={transferTokens}>Transfer Tokens</button>
-                            <button onClick={mintTokens}>Mint Tokens</button>
-                            <button onClick={getBalance}>Check Balance</button>
+                            <p>My Jetton Wallet: {userWalletAddress.toString()}</p>
+                            <button
+                                onClick={transferTokens}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#007bff',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '20px',
+                                    cursor: 'pointer',
+                                    margin: '5px',
+                                }}
+                            >
+                                Transfer Tokens
+                            </button>
+                            <button
+                                onClick={getBalance}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#17a2b8',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '20px',
+                                    cursor: 'pointer',
+                                    margin: '5px',
+                                }}
+                            >
+                                Check Balance
+                            </button>
                         </>
                     )}
-                    <button onClick={() => tonConnectUI.disconnect()}>Disconnect</button>
+                    <button
+                        onClick={() => tonConnectUI.disconnect()}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '20px',
+                            cursor: 'pointer',
+                            margin: '5px',
+                        }}
+                    >
+                        Disconnect
+                    </button>
                 </div>
             ) : (
                 <button
@@ -133,7 +164,7 @@ export const WalletConnector: React.FC = () => {
                         backgroundColor: '#007bff',
                         color: 'white',
                         border: 'none',
-                        borderRadius: '20px', // More rounded edges
+                        borderRadius: '20px',
                         cursor: 'pointer',
                         fontSize: '16px',
                         transition: 'background-color 0.3s',
@@ -144,6 +175,10 @@ export const WalletConnector: React.FC = () => {
                     Connect Wallet
                 </button>
             )}
+
+
+
         </div>
     );
 };
+

@@ -9,5 +9,8 @@ export default defineConfig({
   base: '/',
   resolve: {
     dedupe: ['react', 'react-dom'], // Ensures a single instance of React
+  },
+  server: {
+    allowedHosts: ['six-coats-clean.loca.lt']
   }
 });
