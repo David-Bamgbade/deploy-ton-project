@@ -12,5 +12,8 @@ export default defineConfig({
   },
   server: {
     allowedHosts: ['liquidtoken.vercel.app']
+  },
+  build: {
+    outDir: 'dist',
   }
 });
