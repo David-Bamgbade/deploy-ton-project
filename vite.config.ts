@@ -10,10 +10,12 @@ export default defineConfig({
   resolve: {
     dedupe: ['react', 'react-dom'], // Ensures a single instance of React
   },
+  build: {
+    outDir: 'dist',
+  },
   server: {
     allowedHosts: ['liquidtoken.vercel.app']
   },
-  build: {
-    outDir: 'dist',
-  }
 });
+
+
