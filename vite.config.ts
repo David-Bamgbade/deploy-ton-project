@@ -11,6 +11,6 @@ export default defineConfig({
     dedupe: ['react', 'react-dom'], // Ensures a single instance of React
   },
   server: {
-    allowedHosts: ['liquidtoken-ojnc1sxo5-david-bamgbades-projects.vercel.app']
+    allowedHosts: ['liquidtoken-8e2l5r2dq-david-bamgbades-projects.vercel.app']
   }
 });
