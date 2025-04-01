@@ -1,54 +1,3 @@
-// import { TonConnectUIProvider } from '@tonconnect/ui-react';
-// import { Header } from './Header';
-// import './index.css';
-// import {TokenInteraction} from "./components/TokenInteraction.tsx";
-//
-// export function App() {
-//     return (
-//         <TonConnectUIProvider manifestUrl="https://raw.githubusercontent.com/David-Bamgbade/mY-tOn-FroNtend/master/public/tonconnect-manifest.json">
-//             <div className="app-container">
-//                 <Header />
-//                 <main>
-//                     <TokenInteraction />
-//                 </main>
-//             </div>
-//         </TonConnectUIProvider>
-//     );
-// }
-//
-// export default App;
-
-// src/App.tsx
-// import { TonConnectUIProvider } from '@tonconnect/ui-react';
-// import { Header } from './Header';
-//
-// export function App() {
-//     return (
-//         <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
-//             <Header />
-//             {/* Add other components later */}
-//         </TonConnectUIProvider>
-//     );
-// }
-//
-// export default App;
-
-// import { TonConnectUIProvider } from '@tonconnect/ui-react';
-// import { Header } from './Header';
-//
-// export function App() {
-//     return (
-//         <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
-//             <Header />
-//             {/* Add other components later */}
-//         </TonConnectUIProvider>
-//     );
-// }
-//
-// export default App;
-
-// src/App.tsx
-// src/App.tsx
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './Header';
 import './index.css';
@@ -58,7 +7,7 @@ export function App() {
 
 
     return (
-        <TonConnectUIProvider manifestUrl="https://liquidtoken-8e2l5r2dq-david-bamgbades-projects.vercel.app/manifest.json">
+        <TonConnectUIProvider manifestUrl="https://liquidtoken-a8o223mqa-david-bamgbades-projects.vercel.app/manifest.json">
             <div className="app-container">
                 <Header />
                 <main className="landing">
