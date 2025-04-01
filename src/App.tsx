@@ -7,7 +7,7 @@ export function App() {
 
 
     return (
-        <TonConnectUIProvider manifestUrl="https://liquidtoken-a8o223mqa-david-bamgbades-projects.vercel.app/manifest.json">
+        <TonConnectUIProvider manifestUrl="https://liquidtoken.vercel.app/manifest.json">
             <div className="app-container">
                 <Header />
                 <main className="landing">
