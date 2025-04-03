@@ -12,7 +12,7 @@ export default defineConfig({
     outDir: 'dist',
   },
   server: {
-    allowedHosts: ['final-tact-frontend-c2pcm3q9k-david-bamgbades-projects.vercel.app']
+    allowedHosts: ['liquidtoken.vercel.app']
   },
 });
 
