@@ -1,14 +1,19 @@
 {
-  "routes": [
+  "builds": [
     {
-      "src": "/assets/(.*)",
-      "dest": "/dist/assets/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/index.html"
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": {
+        "framework": "vite",
+        "buildCommand": "npm run build",
+        "outputDirectory": "dist"
+      }
     }
   ],
-
-  "buildCommand": "npm run build"
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
