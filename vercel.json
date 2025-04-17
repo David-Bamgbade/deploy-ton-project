@@ -8,5 +8,7 @@
       "src": "/(.*)",
       "dest": "/dist/index.html"
     }
-  ]
+  ],
+
+  "buildCommand": "npm run build"
 }
