@@ -11,8 +11,8 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
-  // server: {
-  //   allowedHosts: ['liquidtoken.vercel.app']
-  // },
+  server: {
+    allowedHosts: ['bumpy-zoos-grin.loca.lt']
+  },
 });
 
