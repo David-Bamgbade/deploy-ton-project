@@ -9,7 +9,7 @@ import { ClaimAirdrop } from './components/ClaimAirdrop';
 
 export function App() {
     return (
-        <TonConnectUIProvider manifestUrl="https://bumpy-zoos-grin.loca.lt/manifest.json">
+        <TonConnectUIProvider manifestUrl="https://deploy-ton-project.vercel.app/manifest.json">
             <Router>
                 <div className="app-container">
                     <Header />

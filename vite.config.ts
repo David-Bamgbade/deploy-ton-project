@@ -12,7 +12,7 @@ export default defineConfig({
     outDir: 'dist',
   },
   server: {
-    allowedHosts: ['bumpy-zoos-grin.loca.lt']
+    allowedHosts: ['deploy-ton-project.vercel.app']
   },
 });
 
